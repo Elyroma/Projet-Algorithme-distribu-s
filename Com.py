@@ -3,6 +3,7 @@ from threading import Lock, Thread
 from time import sleep
 from BroadcastMessage import BroadcastMessage
 from MessageTo import MessageTo
+from Token import Token
 
 from pyeventbus3.pyeventbus3 import *
 
@@ -17,7 +18,14 @@ class Com ():
 
         self.clock=0
         self.clock_available = Lock()
+
         self.BaL=[]
+        
+        self.token = None
+        self.SCRequestSend = False
+
+        if(self.myId == 0):
+            self.token = Token(self.myId)
 
     @subscribe(threadMode = Mode.PARALLEL, onEvent=BroadcastMessage)
     def onBroadcast(self, event):
@@ -39,6 +47,14 @@ class Com ():
                 self.updateClock(event.getStamp() + 1)
             else :
                 self.incClock()
+
+    @subscribe(threadMode = Mode.PARALLEL, onEvent=Token)
+    def onToken(self, event):
+        if(event.getReceiver() == self.getMyId()):
+            self.token = event    
+            #print(self.getName() + ' Processes event: Getting Token')
+            if not self.SCRequestSend:
+                self.sendTokenToNext()
 
     def updateClock(self, new_value):
         """Met à jour l'horloge avec une nouvelle valeur."""
@@ -65,7 +81,27 @@ class Com ():
         self.incClock()
         message = MessageTo(o, dest, self.getClock())
         print(self.getName() + " send: " + str(message.getPayload()))
-        PyBus.Instance().post(message)  
+        PyBus.Instance().post(message)
+
+    def requestSC(self):
+        """Demande la section critique."""
+        print(self.getName() + " Request token")
+        while(self.token == None):
+            time.sleep(1)
+        self.SCRequestSend = True
+    
+    def releaseSC(self):
+        """Libère la section critique."""
+        self.SCRequestSend = False
+        self.sendTokenToNext()
+
+    def sendTokenToNext(self):
+        receiver = (self.myId + 1) % Com.nbProcessCreated
+        token = self.token
+        token.setReceiver(receiver)
+        #print(self.getName() + " send: Token to " + str(token.getReceiver()))
+        PyBus.Instance().post(token)
+        self.token = None  
 
     def getNbProcess(self):
         return Com.nbProcessCreated   

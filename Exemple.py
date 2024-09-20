@@ -48,7 +48,7 @@ class Process(Thread):
 
 
             if self.getName() == "P1":
-                if ! self.com.mailbox.isEmpty():
+                if not self.com.mailbox.isEmpty():
                     self.com.mailbox.getMessage()
                     self.com.recevFromSync(msg, 0)
 
@@ -81,6 +81,9 @@ class Process(Thread):
 
             loop+=1
         print(self.getName() + " stopped")
+
+    def waitStopped(self):
+        self.join()
 
     def stop(self):
         self.alive = False

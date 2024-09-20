@@ -47,3 +47,18 @@ Pour toutes les fonctions que vous avez réalisées, vous rendrez le code Java (
 ###### Projet :
 ##### Etape 1 : Création de la classe Com
 La classe Com : [Com.py](Com.py)
+
+##### Etape 2 : Tests avec le Launcher du TP et une classe Processus simple extraite de l'exemple
+La classe Processus : [Tester.py](Tester.py)
+
+##### Etape 3 : Classe Message abstraite (+ Broadcast et SendTo)
+La classe Message : [Message.py](Message.py)
+La classe Broadcast : [BroadcastMessage.py](BroadcastMessage.py)
+La classe MessageTo : [MessageTo.py](MessageTo.py)
+
+##### Etape 4 : Ajout du token
+La classe Token : [Token.py](Token.py) 
+
+#### Ce qu'il manque à faire :
+Je n'ai pas eu le temps de faire la partie synchronisation et l'adressage dynamique de l'id.
+J'ai perdu du temps en voulant bien comprendre les concepts du TP (plus de 2 séances passé dessus).

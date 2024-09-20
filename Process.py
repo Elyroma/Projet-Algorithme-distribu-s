@@ -10,7 +10,7 @@ from time import sleep
 from MessageWithTime import MessageWithTime
 from BroadcastMessage import BroadcastMessage
 from MessageTo import MessageTo
-from Token import Token
+from TokenTP import Token
 from Synchronize import Synchronizer
 
 from pyeventbus3.pyeventbus3 import *
