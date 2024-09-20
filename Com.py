@@ -3,12 +3,13 @@ from threading import Lock, Thread
 from time import sleep
 from BroadcastMessage import BroadcastMessage
 from MessageTo import MessageTo
-from Token import Token
+from Token import Token, TokenManager
 
 from pyeventbus3.pyeventbus3 import *
 
 # Communicateur : envoi et réception de messages
 # Contient une horloge de Lamport protégée par sémaphore
+
 
 class Com ():
     nbProcessCreated = 0
@@ -21,12 +22,22 @@ class Com ():
 
         self.BaL=[]
         
+        
         self.token = None
         self.SCRequestSend = False
-
         if(self.myId == 0):
-            token = Token(0)
-            PyBus.Instance().post(token)
+            self.token = Token(self.getMyId())
+        self.tokenManager = TokenManager(self)
+
+            #time.sleep(1)
+            #token = Token(0)
+            #PyBus.Instance().post(token)
+            #Thread(target=send_initial_token, args=(self,)).start()
+    
+
+    def __del__(self):
+        self.tokenManager.stop()
+        self.tokenManager.waitStopped()
 
     @subscribe(threadMode = Mode.PARALLEL, onEvent=BroadcastMessage)
     def onBroadcast(self, event):
@@ -54,8 +65,9 @@ class Com ():
         if(event.getReceiver() == self.getMyId()):
             self.token = event    
             print(self.getName() + ' Processes event: Getting Token')
-            if not self.SCRequestSend:
-                self.sendTokenToNext()
+            #time.sleep(1)
+            #if not self.SCRequestSend:
+            #    self.sendTokenToNext()
 
     def updateClock(self, new_value):
         """Met à jour l'horloge avec une nouvelle valeur."""
@@ -87,22 +99,25 @@ class Com ():
     def requestSC(self):
         """Demande la section critique."""
         print(self.getName() + " Request token")
-        while(self.token == None):
-            time.sleep(1)
         self.SCRequestSend = True
+        while(self.token == None):
+           time.sleep(1)
     
     def releaseSC(self):
         """Libère la section critique."""
         self.SCRequestSend = False
-        self.sendTokenToNext()
+        #self.sendTokenToNext()
 
     def sendTokenToNext(self):
-        receiver = (self.myId + 1) % Com.nbProcessCreated
-        token = self.token
-        token.setReceiver(receiver)
-        print(self.getName() + " send: Token to " + str(token.getReceiver()))
-        PyBus.Instance().post(token)
-        self.token = None  
+        if self.token is not None:
+            receiver = (self.myId + 1) % Com.nbProcessCreated
+            token = self.token
+            token.setReceiver(receiver)
+            print(self.getName() + " send: Token to " + str(token.getReceiver()))
+            PyBus.Instance().post(token)
+            self.token = None  
+        else :
+            print("Error: No token to send")
 
     def getNbProcess(self):
         return Com.nbProcessCreated   

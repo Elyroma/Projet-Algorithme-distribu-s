@@ -30,16 +30,22 @@ class Process(Thread):
         while self.alive:
             print(self.getName() + " Loop: " + str(loop))
             sleep(1)
+            
+            print(self.getName() + " " + str(self.com.token))
 
             if self.getName() == "P0":
                 self.com.broadcast("il y a quelqu'un ?")
                 self.com.sendTo("j'appelle 2 et je te recontacte après", 1)
                 print(self.getName() +" horloge test : " + str(self.com.getClock()))
+                
+            if self.getName() == "P0":
                 print(self.getName() +" Besoin du token")
                 self.com.requestSC()
                 print(self.getName() + " J'attend...")
                 self.com.releaseSC()
                 print(self.getName() + " C'est bon")
+
+            
 
             loop+=1
         print(self.getName() + " stopped")
