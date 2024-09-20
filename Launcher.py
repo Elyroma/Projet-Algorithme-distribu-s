@@ -1,11 +1,11 @@
 from time import sleep
-from Process import Process
+from Tester import Process
 
 def launch(nbProcess, runningTime=5):
     processes = []
 
     for i in range(nbProcess):
-        processes = processes + [Process("P"+str(i), nbProcess)]
+        processes = processes + [Process("P"+str(i))]
 
     sleep(runningTime)
 
@@ -14,9 +14,6 @@ def launch(nbProcess, runningTime=5):
 
     for p in processes:
         p.waitStopped()
-    
-    for p in processes:
-        print(p.getName() + " end with " + str(p.horloge) + " as time.")
 
 if __name__ == '__main__':
 
