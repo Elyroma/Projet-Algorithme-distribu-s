@@ -21,48 +21,49 @@ class Com ():
 
     @subscribe(threadMode = Mode.PARALLEL, onEvent=BroadcastMessage)
     def onBroadcast(self, event):
+        
         if(event.getSender() != self.getMyId()):    
             self.BaL.append(event.getMessage())    
             print(self.getName() + ' Processes event: ' + event.getMessage())
-            if(self.clock < event.getTime()):
-                self.update_clock(event.getTime() + 1)
+            if(self.getClock() < event.getTime()):
+                self.updateClock(event.getTime() + 1)
             else :
-                self.inc_clock()
+                self.incClock()
 
     @subscribe(threadMode = Mode.PARALLEL, onEvent=MessageTo)
     def onReceive(self, event):
         if(event.getReceiver() == self.getMyId()):
             self.BaL.append(event.getMessage())
             print(self.getName() + ' Processes event: ' + event.getMessage())
-            if(self.horloge < event.getTime()):
-                self.update_clock(event.getTime() + 1)
+            if(self.getClock() < event.getTime()):
+                self.updateClock(event.getTime() + 1)
             else :
-                self.inc_clock()
+                self.incClock()
 
-    def update_clock(self, new_value):
+    def updateClock(self, new_value):
         """Met à jour l'horloge avec une nouvelle valeur."""
         with self.clock_available:
             self.clock = new_value
 
-    def inc_clock(self):
+    def incClock(self):
         """Incrémente l'horloge."""
         with self.clock_available:
             self.clock += 1
 
-    def get_clock(self):
+    def getClock(self):
         """Récupère la valeur de l'horloge."""
         with self.clock_available:
             return self.clock
 
     def broadcast(self, o):
-        self.inc_clock()
-        message = BroadcastMessage(o, self.getMyId(), self.get_clock())
+        self.incClock()
+        message = BroadcastMessage(o, self.getMyId(), self.getClock())
         print(self.getName() + " send: " + str(message.getMessage()))
         PyBus.Instance().post(message)
 
     def sendTo(self, o, dest):
-        self.inc_clock()
-        message = MessageTo(o, dest, self.get_clock())
+        self.incClock()
+        message = MessageTo(o, dest, self.getClock())
         print(self.getName() + " send: " + str(message.getMessage()))
         PyBus.Instance().post(message)  
 

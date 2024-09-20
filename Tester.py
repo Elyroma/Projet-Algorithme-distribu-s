@@ -12,7 +12,7 @@ class Process(Thread):
         Thread.__init__(self)
 
         self.com = Com()
-        PyBus.Instance().register(self.com)
+        PyBus.Instance().register(self.com, self)
         
         self.nbProcess = self.com.getNbProcess()
 
@@ -34,7 +34,7 @@ class Process(Thread):
             if self.getName() == "P0":
                 self.com.broadcast("il y a quelqu'un ?")
                 self.com.sendTo("j'appelle 2 et je te recontacte après", 1)
-                print(self.getName() +" horloge test : " + str(self.com.get_clock()))
+                print(self.getName() +" horloge test : " + str(self.com.getClock()))
                 
 
             loop+=1
