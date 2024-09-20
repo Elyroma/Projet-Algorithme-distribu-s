@@ -59,6 +59,6 @@ La classe MessageTo : [MessageTo.py](MessageTo.py)
 ##### Etape 4 : Ajout du token
 La classe Token : [Token.py](Token.py) 
 
-#### Ce qu'il manque à faire :
+##### Ce qu'il manque à faire :
 Je n'ai pas eu le temps de faire la partie synchronisation et l'adressage dynamique de l'id.
 J'ai perdu du temps en voulant bien comprendre les concepts du TP (plus de 2 séances passé dessus).

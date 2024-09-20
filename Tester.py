@@ -35,12 +35,11 @@ class Process(Thread):
                 self.com.broadcast("il y a quelqu'un ?")
                 self.com.sendTo("j'appelle 2 et je te recontacte après", 1)
                 print(self.getName() +" horloge test : " + str(self.com.getClock()))
-                print("besoin du token")
+                print(self.getName() +" Besoin du token")
                 self.com.requestSC()
-                time.sleep(1)
-                print("1")
+                print(self.getName() + " J'attend...")
                 self.com.releaseSC()
-                print("c'est bon")
+                print(self.getName() + " C'est bon")
 
             loop+=1
         print(self.getName() + " stopped")

@@ -25,7 +25,8 @@ class Com ():
         self.SCRequestSend = False
 
         if(self.myId == 0):
-            self.token = Token(self.myId)
+            token = Token(0)
+            PyBus.Instance().post(token)
 
     @subscribe(threadMode = Mode.PARALLEL, onEvent=BroadcastMessage)
     def onBroadcast(self, event):
@@ -52,7 +53,7 @@ class Com ():
     def onToken(self, event):
         if(event.getReceiver() == self.getMyId()):
             self.token = event    
-            #print(self.getName() + ' Processes event: Getting Token')
+            print(self.getName() + ' Processes event: Getting Token')
             if not self.SCRequestSend:
                 self.sendTokenToNext()
 
@@ -99,7 +100,7 @@ class Com ():
         receiver = (self.myId + 1) % Com.nbProcessCreated
         token = self.token
         token.setReceiver(receiver)
-        #print(self.getName() + " send: Token to " + str(token.getReceiver()))
+        print(self.getName() + " send: Token to " + str(token.getReceiver()))
         PyBus.Instance().post(token)
         self.token = None  
 
