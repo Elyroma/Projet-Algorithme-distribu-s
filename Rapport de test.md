@@ -97,38 +97,40 @@ Les fonctions créées : requestSynchronized() et onSynchronize().
 On ajoute également la variable waitSynchronize au processus.
 ###### 3 - Mettez en évidence son bon fonctionnement (la mise à jour correcte de l'horloge sur les Process)
 Pour mettre en évidence l'attente, on simule manuellement que P0 attend quelques seconde avant d'être synchronisé.
+Les processus finissent leurs tâchent avant d'être synchronisée.
 ~~~~
 P0 Loop: 0
 P1 Loop: 0
 P2 Loop: 0
-P2 send: Token to 0
 P1 Request token
+P2 send: Token to 0
 P0 Loop: 1
 P0 Processes event: Getting Token
 P2 Loop: 1
-P2 Loop: 2
 P0 send: Token to 1
+P2 Loop: 2
 P1 Processes event: Getting Token
 P0 Loop: 2
-P2 Loop: 3
-P0 Loop: 3
 P1 send: Hey !
-P0 Processes event: Hey !        
+P0 Loop: 3
+P2 Loop: 3
+P0 Processes event: Hey !
 P1 send: Token to 2
 P2 Processes event: Getting Token
-P1 send: Synchronized request    
-P0 Processes event: Synchronized 
-P2 Processes event: Synchronized 
+P1 send: Synchronized request
+P0 Processes event: Synchronized
+P0 Waiting synchronize
+P2 Processes event: Synchronized
 P2 Waiting synchronize
 P1 Waiting synchronize
-P0 Waiting synchronize
-P0 Synchronized !
-P0 stopped
-P1 Synchronized !
-P1 stopped
-P2 Synchronized !
 P2 send: Token to 0
 P0 Processes event: Getting Token
+P2 Synchronized !
+P2 Loop: 4
+P1 Synchronized !
+P1 stopped
+P0 Synchronized !
+P0 stopped
 P2 stopped
 P0 end with 10 as time.
 P1 end with 7 as time.

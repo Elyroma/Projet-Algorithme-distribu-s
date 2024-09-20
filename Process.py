@@ -95,20 +95,15 @@ class Process(Thread):
             if self.token != None and not self.SC:
                 self.sendTokenToNext()
 
-            
-            print(self.getName() + " ici " + str(self.waitSynchronize))
-            print(self.getName() + " maieuh " + str(self.synchronizer) + " " + str(self.waitSynchronize))
-
             if self.waitSynchronize:
                 self.synchronizer.addSynchronizedProc()
                 self.waitSynchronize = False
             
-                print(self.getName() + " apres " + str(self.waitSynchronize) + " " + str(self.synchronizer.getNbSynchronizedProc()))
-                print(self.getName() + " " + str(self.synchronizer.allAreSynchronized()))
 
-            #while(self.synchronizer != None):
-                #while not self.synchronizer.allAreSynchronized():
-                #    time.sleep(1)
+                while not self.synchronizer.allAreSynchronized():
+                   time.sleep(1)
+                self.synchronizer = None
+                print(self.getName() + " Synchronized !")
 
             loop+=1
         
@@ -157,12 +152,7 @@ class Process(Thread):
     def synchronize(self, synchronizer):
         self.synchronizer = synchronizer
         self.waitSynchronize = True
-        print(self.getName() + " Waiting synchronize " + str(self.synchronizer) + " " + str(self.waitSynchronize))
-        #while not synchronizer.allAreSynchronized():
-        #time.sleep(2)
-            #print(self.getName() + " still waiting...")
-        #print(self.getName() + " Synchronized !")
-        #self.synchronizer = None
+        print(self.getName() + " Waiting synchronize")
 
     def requestSynchronized(self):
         self.horloge += 1
