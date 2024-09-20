@@ -21,7 +21,7 @@ class Com ():
 
     @subscribe(threadMode = Mode.PARALLEL, onEvent=BroadcastMessage)
     def onBroadcast(self, event):
-        if(event.getSender() != self.owner.myId):    
+        if(event.getSender() != self.getMyId()):    
             self.BaL.append(event.getMessage())    
             print(self.getName() + ' Processes event: ' + event.getMessage())
             if(self.clock < event.getTime()):
@@ -31,7 +31,7 @@ class Com ():
 
     @subscribe(threadMode = Mode.PARALLEL, onEvent=MessageTo)
     def onReceive(self, event):
-        if(event.getReceiver() == self.owner.myId):
+        if(event.getReceiver() == self.getMyId()):
             self.BaL.append(event.getMessage())
             print(self.getName() + ' Processes event: ' + event.getMessage())
             if(self.horloge < event.getTime()):
@@ -56,13 +56,13 @@ class Com ():
 
     def broadcast(self, o):
         self.inc_clock()
-        message = BroadcastMessage(o, self.myId, self.get_clock)
+        message = BroadcastMessage(o, self.getMyId(), self.get_clock())
         print(self.getName() + " send: " + str(message.getMessage()))
         PyBus.Instance().post(message)
 
     def sendTo(self, o, dest):
         self.inc_clock()
-        message = MessageTo(o, dest, self.get_clock)
+        message = MessageTo(o, dest, self.get_clock())
         print(self.getName() + " send: " + str(message.getMessage()))
         PyBus.Instance().post(message)  
 
