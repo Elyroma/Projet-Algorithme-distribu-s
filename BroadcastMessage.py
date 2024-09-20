@@ -1,15 +1,8 @@
-class BroadcastMessage ():
+from Message import Message
+class BroadcastMessage (Message):
     def __init__(self, message, sender, time):
-        self.message=message
+        Message.__init__(self, message, time)
         self.sender=sender
-        self.time=time
-
-    def getMessage(self):
-        return self.message
 
     def getSender(self):
         return self.sender
-
-    def getTime(self):
-        return self.time
-

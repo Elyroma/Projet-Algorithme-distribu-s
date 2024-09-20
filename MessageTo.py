@@ -1,15 +1,8 @@
-class MessageTo ():
+from Message import Message
+class MessageTo (Message):
     def __init__(self, message, receiver, time):
-        self.message=message
+        Message.__init__(self, message, time)
         self.receiver=receiver
-        self.time=time
-
-    def getMessage(self):
-        return self.message
 
     def getReceiver(self):
         return self.receiver
-
-    def getTime(self):
-        return self.time
-
