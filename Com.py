@@ -23,20 +23,20 @@ class Com ():
     def onBroadcast(self, event):
         
         if(event.getSender() != self.getMyId()):    
-            self.BaL.append(event.getMessage())    
-            print(self.getName() + ' Processes event: ' + event.getMessage())
-            if(self.getClock() < event.getTime()):
-                self.updateClock(event.getTime() + 1)
+            self.BaL.append(event.getPayload())    
+            print(self.getName() + ' Processes event: ' + event.getPayload())
+            if(self.getClock() < event.getStamp()):
+                self.updateClock(event.getStamp() + 1)
             else :
                 self.incClock()
 
     @subscribe(threadMode = Mode.PARALLEL, onEvent=MessageTo)
     def onReceive(self, event):
         if(event.getReceiver() == self.getMyId()):
-            self.BaL.append(event.getMessage())
-            print(self.getName() + ' Processes event: ' + event.getMessage())
-            if(self.getClock() < event.getTime()):
-                self.updateClock(event.getTime() + 1)
+            self.BaL.append(event.getPayload())
+            print(self.getName() + ' Processes event: ' + event.getPayload())
+            if(self.getClock() < event.getStamp()):
+                self.updateClock(event.getStamp() + 1)
             else :
                 self.incClock()
 
@@ -58,13 +58,13 @@ class Com ():
     def broadcast(self, o):
         self.incClock()
         message = BroadcastMessage(o, self.getMyId(), self.getClock())
-        print(self.getName() + " send: " + str(message.getMessage()))
+        print(self.getName() + " send: " + str(message.getPayload()))
         PyBus.Instance().post(message)
 
     def sendTo(self, o, dest):
         self.incClock()
         message = MessageTo(o, dest, self.getClock())
-        print(self.getName() + " send: " + str(message.getMessage()))
+        print(self.getName() + " send: " + str(message.getPayload()))
         PyBus.Instance().post(message)  
 
     def getNbProcess(self):

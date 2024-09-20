@@ -1,17 +1,19 @@
 class Message ():
-    def __init__(self, message, time):
-        self.message=message
-        self.time=time
+    def __init__(self, payload, stamp):
+        """Contenu du message : payload
+           Marque temporelle : stamp"""
+        self.message=payload
+        self.time=stamp
 
-    def getMessage(self):
+    def getPayload(self):
         return self.message
 
-    def setMessage(self, message):
+    def setPayload(self, message):
         self.message=message
 
-    def getTime(self):
+    def getStamp(self):
         return self.time
     
-    def setTime(self, time):
+    def setStamp(self, time):
         self.time=time
 
